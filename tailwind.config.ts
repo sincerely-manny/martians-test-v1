@@ -9,8 +9,9 @@ export default {
                 elastic: 'cubic-bezier(.75,-0.5,0,1.75)',
             },
             fontFamily: {
-                mono: ['var(--font-mono)', ...fontFamily.serif],
+                mono: ['var(--font-mono)', ...fontFamily.mono],
                 sans: ['var(--font-sans)', ...fontFamily.sans],
+                sansAlt: ['var(--font-sans-alt)', ...fontFamily.serif],
             },
             keyframes: {
                 'accordion-down': {

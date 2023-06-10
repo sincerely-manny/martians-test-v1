@@ -1,6 +1,21 @@
 import throttle from 'lodash.throttle';
 import Head from 'next/head';
 import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import signInSchema from '@/lib/schema/signIn';
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/Form';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 export default () => {
     const cursorDiv = useRef<HTMLDivElement>(null);
@@ -17,6 +32,16 @@ export default () => {
         return () => window.removeEventListener('mousemove', mouseMoveHandler);
     });
 
+    const form = useForm<z.infer<typeof signInSchema>>({
+        resolver: zodResolver(signInSchema),
+        defaultValues: {
+            login: '',
+            password: '',
+        },
+    });
+    const onSubmit = (data: z.infer<typeof signInSchema>) => {
+        console.log(data);
+    };
     return (
         <>
             <Head>
@@ -27,7 +52,7 @@ export default () => {
             </Head>
             <main className="flex min-h-screen flex-col items-center justify-center bg-slate-300">
                 <div
-                    className="absolute left-0 top-0 box-content w-1/3 transition-transform duration-0 ease-in-out will-change-transform"
+                    className="absolute left-0 top-0 box-content w-1/3 transition-transform will-change-transform duration-0 ease-in-out"
                     ref={cursorDiv}
                 >
                     <div className="-ml-[50%] -mt-[50%] aspect-[4/3] w-full origin-center -rotate-45 rounded-full bg-indigo-500 opacity-100" />
@@ -36,8 +61,44 @@ export default () => {
                 <div className="absolute left-0 top-0 h-screen w-screen bg-[url('/img/fuzzy-fuzz.gif')] opacity-10" />
                 <div className="absolute left-0 top-0 h-screen w-screen overflow-hidden bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300 opacity-50 backdrop-blur-xl" />
                 <div className="container relative flex flex-col items-center justify-center gap-12 rounded-lg bg-slate-400 bg-opacity-10 px-4 py-16 shadow-2xl backdrop-blur-sm">
-                    <h1 className="text-8xl text-right w-full">LET&apos;S SIGN IN</h1>
-
+                    <h1 className="w-full text-right text-8xl">LET&apos;S SIGN IN</h1>
+                    <Form {...form}>
+                        <form
+                            onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+                            className="space-y-8"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="login"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Login</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="mail@gmail.com" autoComplete="off" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            E-mail or username
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="********" autoComplete="off" type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit">Submit</Button>
+                        </form>
+                    </Form>
                 </div>
             </main>
         </>
