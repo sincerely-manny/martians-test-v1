@@ -1,6 +1,6 @@
-import throttle from "lodash.throttle";
-import Head from "next/head";
-import { useEffect, useRef } from "react";
+import throttle from 'lodash.throttle';
+import Head from 'next/head';
+import { useEffect, useRef } from 'react';
 
 export default () => {
     const cursorDiv = useRef<HTMLDivElement>(null);
@@ -13,9 +13,10 @@ export default () => {
                 }
             });
         }, 10);
-        window.addEventListener("mousemove", mouseMoveHandler);
-        return () => window.removeEventListener("mousemove", mouseMoveHandler);
+        window.addEventListener('mousemove', mouseMoveHandler);
+        return () => window.removeEventListener('mousemove', mouseMoveHandler);
     });
+
     return (
         <>
             <Head>
@@ -36,7 +37,7 @@ export default () => {
                 <div className="absolute left-0 top-0 h-screen w-screen overflow-hidden bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300 opacity-50 backdrop-blur-xl" />
                 <div className="container relative flex flex-col items-center justify-center gap-12 rounded-lg bg-slate-400 bg-opacity-10 px-4 py-16 shadow-2xl backdrop-blur-sm">
                     <h1 className="text-8xl text-right w-full">LET&apos;S SIGN IN</h1>
-                    
+
                 </div>
             </main>
         </>

@@ -1,7 +1,9 @@
-import { type AppType } from "next/app";
-import { api } from "@/utils/api";
-import "@/styles/globals.css";
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/no-unknown-property */
+import { AppProps } from 'next/app';
 import { Big_Shoulders_Text, Inconsolata } from 'next/font/google';
+import { api } from '@/utils/api';
+import '@/styles/globals.css';
 
 const sans = Big_Shoulders_Text({
     weight: ['400'],
@@ -17,8 +19,7 @@ const mono = Inconsolata({
     variable: '--font-mono',
 });
 
-
-const MyApp: AppType = ({ Component, pageProps }) => (
+const App = ({ Component, pageProps }: AppProps) => (
     <>
         <style jsx global>
             {`
@@ -32,4 +33,4 @@ const MyApp: AppType = ({ Component, pageProps }) => (
     </>
 );
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(App);
