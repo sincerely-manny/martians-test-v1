@@ -64,11 +64,12 @@ export default () => {
                 <div className="absolute left-0 top-0 h-screen w-screen bg-[url('/img/fuzzy-fuzz.gif')] opacity-10" />
                 <div className="absolute left-0 top-0 h-screen w-screen overflow-hidden bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300 opacity-50 backdrop-blur-xl" />
                 <div className="container relative flex flex-col items-center justify-center gap-12 rounded-lg bg-slate-400 bg-opacity-10 px-4 py-16 shadow-2xl backdrop-blur-sm">
-                    <h1 className="w-full text-right text-8xl">LET&apos;S SIGN IN</h1>
+                    <h1 className="w-full text-right text-8xl">LET&apos;S SIGN IN / SIGN UP</h1>
                     <Form {...form}>
                         <form
                             onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-                            className="space-y-8 w-1/2 min-w-fit max-w-lg"
+                            className="space-y-8 w-1/2 min-w-fit max-w-lg group"
+                            data-loading={form.formState.isSubmitting}
                         >
                             <FormField
                                 control={form.control}

@@ -5,11 +5,11 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import cn from '@/lib/cn';
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
+    'relative overflow-hidden font-mono inline-flex items-center justify-center rounded-3xl disabled:opacity-50 disabled:pointer-events-none outline-dashed -outline-offset-2 transition-all ease-elastic focus:bg-opacity-30 focus:outline-offset-8 hover:outline-offset-8 focus:scale-100 outline-1 outline-dashed outline-slate-500',
     {
         variants: {
             variant: {
-                default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+                default: 'bg-transparent text-white',
                 destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
                 outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
                 secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
@@ -18,8 +18,8 @@ const buttonVariants = cva(
             },
             size: {
                 default: 'h-10 py-2 px-4',
-                sm: 'h-9 px-3 rounded-md',
-                lg: 'h-11 px-8 rounded-md',
+                sm: 'h-9 px-3',
+                lg: 'h-11 px-8',
             },
         },
         defaultVariants: {
@@ -45,8 +45,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <Comp
                 className={cn(buttonVariants({ variant, size, className }))}
                 ref={ref}
-                {...props}
-            />
+                {...{ ...props, children: undefined }}
+            >
+                <div className="absolute inset-0 bg-background/20 bg-gradient-to-br from-slate-500 to-pink-500 w-[400%] h-[400%] group-data-loading:animate-gradient-flow transition-all duration-[5s]" aria-hidden="true" />
+                <div className="relative">
+                    {props.children}
+                </div>
+            </Comp>
         );
     },
 );
