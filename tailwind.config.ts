@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { type Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
@@ -30,5 +31,8 @@ export default {
         },
     },
     // eslint-disable-next-line global-require
-    plugins: [require('tailwindcss-animate')],
+    plugins: [
+        require('tailwindcss-animate'),
+        require('@thoughtbot/tailwindcss-aria-attributes'),
+    ],
 } satisfies Config;

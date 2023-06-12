@@ -49,13 +49,16 @@ export default () => {
                 <meta name="description" content="Test sing-in form" />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="manifest" href="/manifest.json" />
+                <meta name="theme-color" content="rgb(100 116 139)" />
             </Head>
             <main className="flex min-h-screen flex-col items-center justify-center bg-slate-300">
-                <div
-                    className="absolute left-0 top-0 box-content w-1/3 transition-transform will-change-transform duration-0 ease-in-out"
-                    ref={cursorDiv}
-                >
-                    <div className="-ml-[50%] -mt-[50%] aspect-[4/3] w-full origin-center -rotate-45 rounded-full bg-indigo-500 opacity-100" />
+                <div className="absolute left-0 top-0 w-screen h-screen overflow-hidden">
+                    <div
+                        className="w-[1000px] transition-transform will-change-transform duration-0 ease-in-out"
+                        ref={cursorDiv}
+                    >
+                        <div className="-ml-[50%] -mt-[50%] aspect-[4/3] w-full origin-center -rotate-45 rounded-full bg-indigo-500 opacity-100" />
+                    </div>
                 </div>
                 <div className="absolute left-0 top-0 h-screen w-screen backdrop-blur-[300px]" />
                 <div className="absolute left-0 top-0 h-screen w-screen bg-[url('/img/fuzzy-fuzz.gif')] opacity-10" />
@@ -65,21 +68,24 @@ export default () => {
                     <Form {...form}>
                         <form
                             onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-                            className="space-y-8"
+                            className="space-y-8 w-1/2 min-w-fit max-w-lg"
                         >
                             <FormField
                                 control={form.control}
                                 name="login"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Login</FormLabel>
+                                        <FormLabel>
+                                            Login
+                                            {' '}
+                                            <FormMessage className="text-red-700" />
+                                        </FormLabel>
                                         <FormControl>
                                             <Input placeholder="mail@gmail.com" autoComplete="off" {...field} />
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className="text-xs opacity-70">
                                             E-mail or username
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -88,15 +94,18 @@ export default () => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>
+                                            Password
+                                            {' '}
+                                            <FormMessage className="text-red-700" />
+                                        </FormLabel>
                                         <FormControl>
                                             <Input placeholder="********" autoComplete="off" type="password" {...field} />
                                         </FormControl>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" tabIndex={0}>Submit</Button>
                         </form>
                     </Form>
                 </div>

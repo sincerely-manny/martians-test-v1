@@ -149,14 +149,14 @@ const FormMessage = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagrap
         }
 
         return (
-            <p
+            <span
                 ref={ref}
                 id={formMessageId}
                 className={cn('text-destructive text-sm font-medium', className)}
                 {...props}
             >
                 {body}
-            </p>
+            </span>
         );
     },
 );

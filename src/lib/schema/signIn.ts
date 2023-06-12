@@ -3,16 +3,16 @@ import * as z from 'zod';
 export default z.object({
     login: z
         .string({
-            required_error: 'Username is required',
-            invalid_type_error: 'Username must be a string',
+            required_error: 'is required',
+            invalid_type_error: 'must be a string',
         })
-        .min(1, 'Username is required')
-        .max(50, "Username isn't supposed to be this long"),
+        .min(1, 'is required')
+        .max(50, "isn't supposed to be longer than 50 characters"),
     password: z
         .string({
-            required_error: 'Password is required',
-            invalid_type_error: 'Password must be a string',
+            required_error: 'is required',
+            invalid_type_error: 'must be a string',
         })
-        .min(8, 'Password is too short')
-        .max(50, "No, your password isn'n so long"),
+        .min(8, 'is too short')
+        .max(50, "can't be longer than 50 characters"),
 });
