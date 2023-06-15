@@ -143,7 +143,7 @@ export default () => {
                 <div className="col-span-1 col-start-1 col-end-1 row-span-1 row-start-1 row-end-1 w-screen bg-[url('/img/fuzzy-fuzz.gif')] opacity-10" />
                 <div className="col-span-1 col-start-1 col-end-1 row-span-1 row-start-1 row-end-1 w-screen overflow-hidden bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300 opacity-50 backdrop-blur-xl" />
                 <div className="col-span-1 col-start-1 col-end-1 row-span-1 row-start-1 row-end-1 flex items-center justify-center">
-                    <div className="container relative my-10 flex flex-col items-center justify-center gap-12 rounded-lg bg-slate-400 bg-opacity-10 px-4 py-16 shadow-2xl backdrop-blur-sm">
+                    <div className="container relative my-10 flex flex-col items-center justify-center gap-12 rounded-lg bg-slate-400 bg-opacity-10 px-4 py-16 shadow-2xl backdrop-blur-sm transition-all duration-1000">
                         <Tabs.Root value={slug?.toString() || 'sign-in'}>
                             <h1 className="w-full text-right text-8xl mb-10">
                                 LET&apos;S
@@ -151,10 +151,10 @@ export default () => {
                                 <Link
                                     href="/user/sign-in"
                                     aria-selected={slug === 'sign-in' || !slug}
-                                    className="flex-col inline-flex opacity-50 aria-selected:opacity-100 transition-all duration-500 group"
+                                    className="flex-col inline-flex opacity-50 aria-selected:opacity-100 transition-all duration-500 group ease-in"
                                 >
                                     <span>SIGN IN</span>
-                                    <div className="h-1 bg-slate-600 w-0 group-aria-selected:w-full transition-all duration-500 self-end" />
+                                    <div className="h-1 bg-slate-700 w-0 group-aria-selected:w-full transition-all duration-500 self-end ease-in" />
                                 </Link>
                                 {' '}
                                 /
@@ -162,13 +162,13 @@ export default () => {
                                 <Link
                                     href="/user/sign-up"
                                     aria-selected={slug === 'sign-up'}
-                                    className="flex-col inline-flex opacity-50 aria-selected:opacity-100 transition-all duration-500 group"
+                                    className="flex-col inline-flex opacity-50 aria-selected:opacity-100 transition-all duration-500 group ease-in"
                                 >
                                     <span>SIGN UP</span>
-                                    <div className="h-1 bg-slate-600 w-0 group-aria-selected:w-full transition-all duration-500 self-start" />
+                                    <div className="h-1 bg-slate-700 w-0 group-aria-selected:w-full transition-all duration-500 self-start ease-in" />
                                 </Link>
                             </h1>
-                            <Tabs.Content value="sign-in">
+                            <Tabs.Content value="sign-in" className="data-[state=active]:animate-tab-show data-[state=inactive]:animate-tab-hide origin-top-left overflow-hidden">
                                 <Form {...signInForm}>
                                     <form
                                         onSubmit={
@@ -250,7 +250,7 @@ export default () => {
                                 </Form>
                             </Tabs.Content>
 
-                            <Tabs.Content value="sign-up">
+                            <Tabs.Content value="sign-up" className="data-[state=active]:animate-tab-show data-[state=inactive]:animate-tab-hide origin-top-left overflow-hidden">
                                 <Form {...signUpForm}>
                                     <form
                                         onSubmit={

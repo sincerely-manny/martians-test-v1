@@ -34,12 +34,22 @@ export default {
                     '10%, 30%, 50%, 70%, 90%': { transform: 'translate3d(-10px, 0, 0)' },
                     '20%, 40%, 60%, 80%': { transform: 'translate3d(10px, 0, 0)' },
                 },
+                tabHide: {
+                    from: { opacity: '1', maxHeight: '1000px' },
+                    to: { opacity: '0', maxHeight: '0' },
+                },
+                tabShow: {
+                    from: { opacity: '0', maxHeight: '0' },
+                    to: { opacity: '1', maxHeight: '1000px' },
+                },
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
                 'gradient-flow': 'gradient-flow 5s infinite',
                 'shake-x': 'shakeX 0.5s ease-in-out',
+                'tab-show': 'tabShow 0.5s ease-out',
+                'tab-hide': 'tabHide 0.5s ease-out',
             },
             data: {
                 loading: 'loading~="true"',
