@@ -1,9 +1,21 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import signInSchema from '@/lib/schema/signIn';
 import signUpSchema from '@/lib/schema/signUp';
 import userPassword from '@/lib/userPassword';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { sign } from '@/lib/jwt';
+
+const defaultUserSelect: Prisma.UserSelect = {
+    id: true,
+    username: true,
+    email: true,
+    createdAt: true,
+    updatedAt: true,
+    passwordHash: false,
+    salt: false,
+};
 
 export default createTRPCRouter({
     signIn: publicProcedure
@@ -12,23 +24,39 @@ export default createTRPCRouter({
             const user = await ctx.prisma.user.findFirst({
                 where: {
                     OR: [
-                        { email: login },
+                        { email: login.toLocaleLowerCase() },
                         { username: login },
                     ],
                 },
             });
             if (user && userPassword.compare(password, user.passwordHash, user.salt)) {
-                return user;
+                const token = await sign({ id: user.id });
+                const { id, username, email } = user;
+                return {
+                    token,
+                    id,
+                    email,
+                    username,
+                };
             }
-            return null;
+            throw new TRPCError({
+                code: 'UNAUTHORIZED',
+                message: 'Invalid credentials',
+            });
         }),
     checkUnique: publicProcedure
         .input(z.object({ username: z.string().optional(), email: z.string().optional() }))
         .query(async ({ input: { username, email }, ctx }) => {
-            if (username && (await ctx.prisma.user.findUnique({ where: { username } }))) {
+            if (username && (
+                await ctx.prisma.user.findUnique({ where: { username }, select: { id: true } })
+            )) {
                 return { username: true };
             }
-            if (email && (await ctx.prisma.user.findUnique({ where: { email } }))) {
+            if (email && (
+                await ctx.prisma.user.findUnique(
+                    { where: { email: email.toLocaleLowerCase() }, select: { id: true } },
+                )
+            )) {
                 return { email: true };
             }
             return { username: false, email: false };
@@ -40,10 +68,11 @@ export default createTRPCRouter({
             const userExists = await ctx.prisma.user.findFirst({
                 where: {
                     OR: [
-                        { email },
+                        { email: email.toLocaleLowerCase() },
                         { username },
                     ],
                 },
+                select: { id: true },
             });
             if (userExists) {
                 throw new TRPCError({
@@ -54,10 +83,11 @@ export default createTRPCRouter({
             const user = await ctx.prisma.user.create({
                 data: {
                     username,
-                    email,
+                    email: email.toLocaleLowerCase(),
                     passwordHash,
                     salt,
                 },
+                select: defaultUserSelect,
             });
             return user;
         }),

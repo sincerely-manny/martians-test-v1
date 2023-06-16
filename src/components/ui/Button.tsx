@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 ref={ref}
                 {...{ ...props, children: undefined }}
             >
-                <div className="absolute inset-0 bg-background/20 bg-gradient-to-br from-slate-500 to-pink-500 w-[400%] h-[400%] group-data-loading:animate-gradient-flow transition-all duration-[5s]" aria-hidden="true" />
+                <div className="absolute inset-0 bg-background/20 bg-gradient-to-br from-slate-500 to-pink-500 w-[400%] h-[400%] group-data-loading:animate-gradient-flow transition-all duration-[5s] group-active:-translate-x-1/2 group-active:-translate-y-1/2 select-none" aria-hidden="true" />
                 <div className="relative">
                     {props.children}
                 </div>

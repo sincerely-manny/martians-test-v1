@@ -20,7 +20,7 @@ import { prisma } from '@/server/db';
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 
-type CreateContextOptions = Record<string, never>;
+type CreateContextOptions = { jwt: string | null };
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
@@ -32,8 +32,9 @@ type CreateContextOptions = Record<string, never>;
  *
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
-const createInnerTRPCContext = (_opts: CreateContextOptions) => ({
+const createInnerTRPCContext = (opts: CreateContextOptions) => ({
     prisma,
+    jwt: opts.jwt,
 });
 
 /**
@@ -42,7 +43,9 @@ const createInnerTRPCContext = (_opts: CreateContextOptions) => ({
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (_opts: CreateNextContextOptions) => createInnerTRPCContext({});
+export const createTRPCContext = (opts: CreateNextContextOptions) => createInnerTRPCContext({
+    jwt: opts.req.cookies['x-access-token'] || null,
+});
 
 /**
  * 2. INITIALIZATION

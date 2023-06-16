@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { AppProps } from 'next/app';
 import { Big_Shoulders_Text, Inconsolata, Montserrat } from 'next/font/google';
+import { CookiesProvider } from 'react-cookie';
 import { api } from '@/utils/api';
 import '@/styles/globals.css';
 
@@ -36,7 +37,9 @@ const App = ({ Component, pageProps }: AppProps) => (
                 }
                 `}
         </style>
-        <Component {...pageProps} />
+        <CookiesProvider>
+            <Component {...pageProps} />
+        </CookiesProvider>
     </>
 );
 

@@ -42,6 +42,10 @@ export default {
                     from: { opacity: '0', maxHeight: '0' },
                     to: { opacity: '1', maxHeight: '1000px' },
                 },
+                fadeIn: {
+                    from: { opacity: '0' },
+                    to: { opacity: '1' },
+                },
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
@@ -50,6 +54,7 @@ export default {
                 'shake-x': 'shakeX 0.5s ease-in-out',
                 'tab-show': 'tabShow 0.5s ease-out',
                 'tab-hide': 'tabHide 0.5s ease-out',
+                'fade-in': 'fadeIn 1s ease-out',
             },
             data: {
                 loading: 'loading~="true"',
