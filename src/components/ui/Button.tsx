@@ -5,7 +5,7 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import cn from '@/lib/cn';
 
 const buttonVariants = cva(
-    'relative overflow-hidden font-mono inline-flex items-center justify-center rounded-3xl disabled:opacity-50 disabled:pointer-events-none outline-dashed -outline-offset-2 transition-all ease-elastic focus:bg-opacity-30 focus:outline-offset-8 hover:outline-offset-8 focus:scale-100 outline-1 outline-dashed outline-slate-500 disabled:cursor-not-allowed',
+    'relative overflow-hidden font-mono inline-flex items-center justify-center rounded-3xl disabled:opacity-50 disabled:pointer-events-none outline-dashed -outline-offset-2 transition-all ease-elastic focus:bg-opacity-30 focus:outline-offset-8 hover:outline-offset-8 focus:scale-100 outline-1 outline-dashed outline-slate-500 disabled:cursor-not-allowed select-none',
     {
         variants: {
             variant: {
@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 ref={ref}
                 {...{ ...props, children: undefined }}
             >
-                <div className="absolute inset-0 bg-background/20 bg-gradient-to-br from-slate-500 to-pink-500 w-[400%] h-[400%] group-data-loading:animate-gradient-flow transition-all duration-[5s] group-active:-translate-x-1/2 group-active:-translate-y-1/2 select-none" aria-hidden="true" />
+                <div className="absolute inset-0 bg-background/20 bg-gradient-to-br from-slate-500 to-pink-500 w-[400%] h-[400%] group-data-loading:animate-gradient-flow transition-all duration-5000 group-active:-translate-x-1/2 group-active:-translate-y-1/2" aria-hidden="true" />
                 <div className="relative">
                     {props.children}
                 </div>

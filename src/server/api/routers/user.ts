@@ -89,6 +89,7 @@ export default createTRPCRouter({
                 },
                 select: defaultUserSelect,
             });
-            return user;
+            const token = await sign({ id: user.id });
+            return { ...user, token };
         }),
 });

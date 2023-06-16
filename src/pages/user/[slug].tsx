@@ -63,7 +63,6 @@ export default () => {
             }
             if (signInQuery.error?.data?.code === 'UNAUTHORIZED') {
                 signInForm.setError('root', { message: 'Invalid login or password' });
-                console.log('Invalid login or password');
             }
         }
     }, [
@@ -87,12 +86,7 @@ export default () => {
                     console.log('Error redirecting to /protected');
                 });
             })
-            .catch(() => {
-                if (signInQuery.error?.data?.code === 'UNAUTHORIZED') {
-                    signInForm.setError('root', { message: 'Invalid login or password' });
-                    console.log('Invalid login or password');
-                }
-            });
+            .catch(() => {});
     };
 
     const signUpForm = useForm<z.infer<typeof signUpSchema>>({
@@ -137,12 +131,18 @@ export default () => {
         const {
             username, email, password, passwordConfirmation,
         } = data;
-        signUpQuery.mutate({
+        signUpQuery.mutateAsync({
             username,
             email,
             password,
             passwordConfirmation,
-        });
+        }).then((user) => {
+            setCookie('x-access-token', user.token, { path: '/' });
+            router.push('/protected').catch(() => {
+                // eslint-disable-next-line no-console
+                console.log('Error redirecting to /protected');
+            });
+        }).catch(() => {});
     };
 
     return (

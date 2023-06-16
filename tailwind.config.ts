@@ -59,6 +59,9 @@ export default {
             data: {
                 loading: 'loading~="true"',
             },
+            transitionDuration: {
+                5000: '5000ms',
+            },
         },
     },
     // eslint-disable-next-line global-require
