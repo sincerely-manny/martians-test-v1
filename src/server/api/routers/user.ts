@@ -47,19 +47,23 @@ export default createTRPCRouter({
     checkUnique: publicProcedure
         .input(z.object({ username: z.string().optional(), email: z.string().optional() }))
         .query(async ({ input: { username, email }, ctx }) => {
+            const result = {
+                username: false,
+                email: false,
+            };
             if (username && (
                 await ctx.prisma.user.findUnique({ where: { username }, select: { id: true } })
             )) {
-                return { username: true };
+                result.username = true;
             }
             if (email && (
                 await ctx.prisma.user.findUnique(
                     { where: { email: email.toLocaleLowerCase() }, select: { id: true } },
                 )
             )) {
-                return { email: true };
+                result.email = true;
             }
-            return { username: false, email: false };
+            return result;
         }),
     signUp: publicProcedure
         .input(signUpSchema)

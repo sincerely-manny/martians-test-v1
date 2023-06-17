@@ -1,13 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Tabs from '@radix-ui/react-tabs';
+import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
-import { Disc3 } from 'lucide-react';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { Disc3, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import {
+    useCallback, useEffect, useRef, useState,
+} from 'react';
 import { useCookies } from 'react-cookie';
+import { useForm, useWatch } from 'react-hook-form';
+import * as z from 'zod';
 import { api } from '@/utils/api';
 import signUpSchema from '@/lib/schema/signUp';
 import signInSchema from '@/lib/schema/signIn';
@@ -100,30 +103,7 @@ export default () => {
     });
     const [signUpFormDisabled, setSignUpFormDisabled] = useState(false);
     const signUpQuery = api.user.signUp.useMutation();
-    useEffect(() => {
-        if (signUpQuery.isError) {
-            const errors = signUpQuery.error?.data?.zodError?.fieldErrors;
-            if (errors?.email) {
-                signUpForm.setError('email', { message: errors.email.join(', ') });
-            }
-            if (errors?.username) {
-                signUpForm.setError('username', { message: errors.username.join(', ') });
-            }
-            if (errors?.password) {
-                signUpForm.setError('password', { message: errors.password.join(', ') });
-            }
-            if (errors?.passwordConfirmation) {
-                signUpForm.setError('passwordConfirmation', {
-                    message: errors.passwordConfirmation.join(', '),
-                });
-            }
-        }
-    }, [
-        signUpForm,
-        signUpQuery.error?.data?.zodError?.fieldErrors,
-        signUpQuery.isError,
-        signUpQuery.status,
-    ]);
+
     useEffect(() => {
         setSignUpFormDisabled(signUpQuery.isLoading);
     }, [signUpQuery.isLoading]);
@@ -144,6 +124,71 @@ export default () => {
             });
         }).catch(() => {});
     };
+
+    const { email, username } = useWatch(signUpForm);
+
+    const [debouncedEmail, setDebouncedEmail] = useState(email);
+    const [debouncedUsername, setDebouncedUsername] = useState(username);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedSetDebouncedEmail = useCallback(debounce(setDebouncedEmail, 500), []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedSetDebouncedUsername = useCallback(debounce(setDebouncedUsername, 500), []);
+
+    useEffect(() => {
+        debouncedSetDebouncedEmail(email);
+        debouncedSetDebouncedUsername(username);
+    }, [debouncedSetDebouncedEmail, debouncedSetDebouncedUsername, email, username]);
+
+    const checkUniqueEmail = api.user.checkUnique.useQuery({ email: debouncedEmail });
+    const checkUniqueUsername = api.user.checkUnique.useQuery({ username: debouncedUsername });
+
+    useEffect(() => {
+        signUpForm.clearErrors('email');
+        signUpForm.clearErrors('username');
+        if (
+            signUpQuery.isError
+            || checkUniqueEmail.data?.email
+            || checkUniqueUsername.data?.username
+        ) {
+            const errors = signUpQuery.error?.data?.zodError?.fieldErrors;
+            if (errors?.email || checkUniqueEmail.data?.email) {
+                const message: string[] = [];
+                if (errors?.email) {
+                    message.concat(errors.email);
+                }
+                if (checkUniqueEmail.data?.email) {
+                    message.push('is already registered');
+                }
+                signUpForm.control.setError('email', { message: message.join(', ') });
+            }
+            if (errors?.username || checkUniqueUsername.data?.username) {
+                const message: string[] = [];
+                if (errors?.username) {
+                    message.concat(errors.username);
+                }
+                if (checkUniqueUsername.data?.username) {
+                    message.push('is already taken');
+                }
+                signUpForm.setError('username', { message: message.join(', ') });
+            }
+            if (errors?.password) {
+                signUpForm.setError('password', { message: errors.password.join(', ') });
+            }
+            if (errors?.passwordConfirmation) {
+                signUpForm.setError('passwordConfirmation', {
+                    message: errors.passwordConfirmation.join(', '),
+                });
+            }
+        }
+    }, [
+        checkUniqueEmail.data?.email,
+        checkUniqueUsername.data?.username,
+        signUpForm,
+        signUpQuery.error?.data?.zodError?.fieldErrors,
+        signUpQuery.isError,
+        signUpQuery.status,
+    ]);
 
     return (
         <MainLayout>
@@ -294,15 +339,19 @@ export default () => {
                                                     {' '}
                                                     <FormMessage className="text-red-700" />
                                                 </FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder="mail@gmail.com"
-                                                        autoComplete="off"
-                                                        aria-disabled={signUpFormDisabled}
-                                                        disabled={signUpFormDisabled}
-                                                        {...field}
-                                                    />
-                                                </FormControl>
+                                                <div className="grid items-center grid-cols-[1fr_2rem]">
+                                                    <FormControl>
+                                                        <Input
+                                                            placeholder="mail@gmail.com"
+                                                            autoComplete="off"
+                                                            aria-disabled={signUpFormDisabled}
+                                                            disabled={signUpFormDisabled}
+                                                            {...field}
+                                                            className="col-span-2 row-span-1 row-start-1 col-start-1"
+                                                        />
+                                                    </FormControl>
+                                                    {checkUniqueEmail.isFetching && <Loader2 className="animate-spin col-start-2 row-start-1" />}
+                                                </div>
                                             </FormItem>
                                         )}
                                     />
@@ -316,14 +365,18 @@ export default () => {
                                                     {' '}
                                                     <FormMessage className="text-red-700" />
                                                 </FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        autoComplete="off"
-                                                        aria-disabled={signUpFormDisabled}
-                                                        disabled={signUpFormDisabled}
-                                                        {...field}
-                                                    />
-                                                </FormControl>
+                                                <div className="grid items-center grid-cols-[1fr_2rem]">
+                                                    <FormControl>
+                                                        <Input
+                                                            autoComplete="off"
+                                                            aria-disabled={signUpFormDisabled}
+                                                            disabled={signUpFormDisabled}
+                                                            {...field}
+                                                            className="col-span-2 row-span-1 row-start-1 col-start-1"
+                                                        />
+                                                    </FormControl>
+                                                    {checkUniqueUsername.isFetching && <Loader2 className="animate-spin col-start-2 row-start-1" />}
+                                                </div>
                                                 <FormDescription className="text-xs opacity-70">
                                                     1-50 characters, starts with a letter, only
                                                     letters and numbers
