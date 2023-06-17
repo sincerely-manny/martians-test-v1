@@ -111,18 +111,21 @@ export default () => {
         const {
             username, email, password, passwordConfirmation,
         } = data;
-        signUpQuery.mutateAsync({
-            username,
-            email,
-            password,
-            passwordConfirmation,
-        }).then((user) => {
-            setCookie('x-access-token', user.token, { path: '/' });
-            router.push('/protected').catch(() => {
-                // eslint-disable-next-line no-console
-                console.log('Error redirecting to /protected');
-            });
-        }).catch(() => {});
+        signUpQuery
+            .mutateAsync({
+                username,
+                email,
+                password,
+                passwordConfirmation,
+            })
+            .then((user) => {
+                setCookie('x-access-token', user.token, { path: '/' });
+                router.push('/protected').catch(() => {
+                    // eslint-disable-next-line no-console
+                    console.log('Error redirecting to /protected');
+                });
+            })
+            .catch(() => {});
     };
 
     const { email, username } = useWatch(signUpForm);
@@ -205,8 +208,11 @@ export default () => {
             <div className="col-span-1 col-start-1 col-end-1 row-span-1 row-start-1 row-end-1 w-screen overflow-hidden bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-300 opacity-50 backdrop-blur-xl" />
             <div className="col-span-1 col-start-1 col-end-1 row-span-1 row-start-1 row-end-1 flex items-center justify-center">
                 <div className="container relative my-10 flex flex-col items-center justify-center gap-12 rounded-lg bg-slate-400 bg-opacity-10 px-4 py-16 shadow-2xl backdrop-blur-sm transition-all duration-1000">
-                    <Tabs.Root value={slug?.toString() || 'sign-in'}>
-                        <h1 className="mb-10 w-full text-right text-8xl">
+                    <Tabs.Root
+                        value={slug?.toString() || 'sign-in'}
+                        className="w-full min-w-fit max-w-lg transition-all sm:w-1/2"
+                    >
+                        <h1 className="mb-10 w-full text-right text-2xl md:text-6xl xl:text-8xl">
                             LET&apos;S
                             {' '}
                             <Link
@@ -231,14 +237,14 @@ export default () => {
                         </h1>
                         <Tabs.Content
                             value="sign-in"
-                            className="origin-top-left data-[state=active]:animate-tab-show data-[state=inactive]:animate-tab-hide"
+                            className="w-full origin-top-left data-[state=active]:animate-tab-show data-[state=inactive]:animate-tab-hide"
                         >
                             <Form {...signInForm}>
                                 <form
                                     onSubmit={
                                         (e) => void signInForm.handleSubmit(onSingInSubmit)(e)
                                     }
-                                    className="group w-1/2 min-w-fit max-w-lg space-y-8"
+                                    className="group w-full space-y-8"
                                     data-loading={signInForm.formState.isSubmitting}
                                 >
                                     <FormField
@@ -310,7 +316,7 @@ export default () => {
                                             size={60}
                                         />
                                     )}
-                                    <span className="text-red-700 float-right">
+                                    <span className="float-right text-red-700">
                                         {signInForm.formState.errors.root?.message}
                                     </span>
                                 </form>
@@ -319,14 +325,14 @@ export default () => {
 
                         <Tabs.Content
                             value="sign-up"
-                            className="origin-top-left data-[state=active]:animate-tab-show data-[state=inactive]:animate-tab-hide"
+                            className="w-full origin-top-left data-[state=active]:animate-tab-show data-[state=inactive]:animate-tab-hide"
                         >
                             <Form {...signUpForm}>
                                 <form
                                     onSubmit={
                                         (e) => void signUpForm.handleSubmit(onSingUpSubmit)(e)
                                     }
-                                    className="group w-1/2 min-w-fit max-w-lg space-y-8"
+                                    className="group w-full space-y-8"
                                     data-loading={signUpForm.formState.isSubmitting}
                                 >
                                     <FormField
@@ -339,7 +345,7 @@ export default () => {
                                                     {' '}
                                                     <FormMessage className="text-red-700" />
                                                 </FormLabel>
-                                                <div className="grid items-center grid-cols-[1fr_2rem]">
+                                                <div className="grid grid-cols-[1fr_2rem] items-center">
                                                     <FormControl>
                                                         <Input
                                                             placeholder="mail@gmail.com"
@@ -347,10 +353,12 @@ export default () => {
                                                             aria-disabled={signUpFormDisabled}
                                                             disabled={signUpFormDisabled}
                                                             {...field}
-                                                            className="col-span-2 row-span-1 row-start-1 col-start-1"
+                                                            className="col-span-2 col-start-1 row-span-1 row-start-1"
                                                         />
                                                     </FormControl>
-                                                    {checkUniqueEmail.isFetching && <Loader2 className="animate-spin col-start-2 row-start-1" />}
+                                                    {checkUniqueEmail.isFetching && (
+                                                        <Loader2 className="col-start-2 row-start-1 animate-spin" />
+                                                    )}
                                                 </div>
                                             </FormItem>
                                         )}
@@ -365,17 +373,19 @@ export default () => {
                                                     {' '}
                                                     <FormMessage className="text-red-700" />
                                                 </FormLabel>
-                                                <div className="grid items-center grid-cols-[1fr_2rem]">
+                                                <div className="grid grid-cols-[1fr_2rem] items-center">
                                                     <FormControl>
                                                         <Input
                                                             autoComplete="off"
                                                             aria-disabled={signUpFormDisabled}
                                                             disabled={signUpFormDisabled}
                                                             {...field}
-                                                            className="col-span-2 row-span-1 row-start-1 col-start-1"
+                                                            className="col-span-2 col-start-1 row-span-1 row-start-1"
                                                         />
                                                     </FormControl>
-                                                    {checkUniqueUsername.isFetching && <Loader2 className="animate-spin col-start-2 row-start-1" />}
+                                                    {checkUniqueUsername.isFetching && (
+                                                        <Loader2 className="col-start-2 row-start-1 animate-spin" />
+                                                    )}
                                                 </div>
                                                 <FormDescription className="text-xs opacity-70">
                                                     1-50 characters, starts with a letter, only

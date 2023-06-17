@@ -5,7 +5,7 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import cn from '@/lib/cn';
 
 const buttonVariants = cva(
-    'relative overflow-hidden font-mono inline-flex items-center justify-center rounded-3xl disabled:opacity-50 disabled:pointer-events-none outline-dashed -outline-offset-2 transition-all ease-elastic focus:bg-opacity-30 focus:outline-offset-8 hover:outline-offset-8 focus:scale-100 outline-1 outline-dashed outline-slate-500 disabled:cursor-not-allowed select-none',
+    'relative overflow-hidden font-mono inline-flex items-center justify-center rounded-3xl disabled:opacity-50 disabled:pointer-events-none outline-dashed -outline-offset-2 transition-all ease-elastic focus:bg-opacity-30 focus:outline-offset-8 hover:outline-offset-8 focus:scale-100 outline-1 outline-dashed outline-slate-500 disabled:cursor-not-allowed select-none group',
     {
         variants: {
             variant: {
