@@ -11,13 +11,14 @@ export default () => {
     const removeCookie = useCookies(['x-access-token'])[2];
     return (
         <MainLayout>
-            <div className="flex flex-col items-center justify-center animate-fade-in">
+            <div className="flex flex-col items-center justify-center animate-fade-in py-20">
                 <h1 className="text-4xl mb-20">Congrats! You&apos;re authorized to see this adorable kitten!</h1>
                 <Image
                     src={kitten}
                     alt="kitten"
                     width={600}
                     className="w-[600px] max-w-full rounded-xl object-fill animate-bounce"
+                    placeholder="blur"
                 />
                 <Button
                     onClick={() => {

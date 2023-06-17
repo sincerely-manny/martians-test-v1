@@ -83,6 +83,7 @@ export default () => {
         signInQuery
             .mutateAsync({ login, password })
             .then((user) => {
+                // TODO: add sussess state (visual)
                 setCookie('x-access-token', user.token, { path: '/' });
                 router.push('/protected').catch(() => {
                     // eslint-disable-next-line no-console
