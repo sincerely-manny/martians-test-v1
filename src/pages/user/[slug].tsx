@@ -77,8 +77,8 @@ export default () => {
         signInQuery.status,
     ]);
     useEffect(() => {
-        setSignInFormDisabled(signInQuery.isLoading);
-    }, [signInQuery.isLoading]);
+        setSignInFormDisabled(signInQuery.isLoading || isSuccess);
+    }, [isSuccess, signInQuery.isLoading]);
     const onSingInSubmit = (data: z.infer<typeof signInSchema>) => {
         const { login, password } = data;
         signInQuery
@@ -107,8 +107,8 @@ export default () => {
     const signUpQuery = api.user.signUp.useMutation();
 
     useEffect(() => {
-        setSignUpFormDisabled(signUpQuery.isLoading);
-    }, [signUpQuery.isLoading]);
+        setSignUpFormDisabled(signUpQuery.isLoading || isSuccess);
+    }, [isSuccess, signUpQuery.isLoading]);
     const onSingUpSubmit = (data: z.infer<typeof signUpSchema>) => {
         const {
             username, email, password, passwordConfirmation,
