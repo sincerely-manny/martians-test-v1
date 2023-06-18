@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as Tabs from '@radix-ui/react-tabs';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
-import { Disc3, Loader2 } from 'lucide-react';
+import { CheckCircle, Disc3, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
@@ -32,6 +32,7 @@ export default () => {
     const { slug } = router.query;
     const cursorDiv = useRef<HTMLDivElement>(null);
     const setCookie = useCookies(['x-access-token'])[1];
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         const cursor = cursorDiv.current;
@@ -83,7 +84,7 @@ export default () => {
         signInQuery
             .mutateAsync({ login, password })
             .then((user) => {
-                // TODO: add sussess state (visual)
+                setIsSuccess(true);
                 setCookie('x-access-token', user.token, { path: '/' });
                 router.push('/protected').catch(() => {
                     // eslint-disable-next-line no-console
@@ -120,6 +121,7 @@ export default () => {
                 passwordConfirmation,
             })
             .then((user) => {
+                setIsSuccess(true);
                 setCookie('x-access-token', user.token, { path: '/' });
                 router.push('/protected').catch(() => {
                     // eslint-disable-next-line no-console
@@ -317,6 +319,7 @@ export default () => {
                                             size={60}
                                         />
                                     )}
+                                    {isSuccess && <CheckCircle size={60} className="inline align-top text-emerald-600 animate-ping ml-5" />}
                                     <span className="float-right text-red-700">
                                         {signInForm.formState.errors.root?.message}
                                     </span>
@@ -469,6 +472,7 @@ export default () => {
                                             size={60}
                                         />
                                     )}
+                                    {isSuccess && <CheckCircle size={60} className="inline align-top text-emerald-600 animate-ping ml-5" />}
                                 </form>
                             </Form>
                         </Tabs.Content>
