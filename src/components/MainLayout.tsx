@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 export default ({ children }: PropsWithChildren) => (
     <>
         <Head>
-            <title>Test item for martians</title>
+            <title>Test item for martians v1 (w/ libraries)</title>
             <meta name="description" content="Test sing-in form" />
             <link rel="icon" href="/favicon.ico" />
             <link rel="manifest" href="/manifest.json" />
